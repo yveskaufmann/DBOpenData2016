@@ -92,8 +92,8 @@
 		this.heatmapOutLayer = new HeatmapOverlay(this.heatmapOutCfg);
 
 		this.map = L.map(this.$map.get(0), {
-			zoom: 10,
-			maxZoom: 19,
+			zoom: 20,
+			maxZoom: 26,
 			minZoom: 3,
 			center: [52.505, 13.09],
 			layers: [
@@ -125,9 +125,10 @@
 			position: "topleft",
 			keepCurrentZoomLevel: false,
 			locateOptions: {
-				maxZoom: 10
+				maxZoom: 13
 			}
 		}).addTo(this.map);
+		L.control.mousePosition().addTo(this.map);
 
 		this.heatmapInLayer.setData(bookingStarts);
 		this.heatmapOutLayer.setData(bookingEnds);
