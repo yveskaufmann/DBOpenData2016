@@ -112,10 +112,9 @@
 		};
 
 		var heatLayer = {
-			'Gesamtnutzung': this.heatmapLayer
-			,
-			'Ankommende Fahräder': this.heatmapInLayer,
-			'Ausgehende Fahräder': this.heatmapOutLayer
+			'Gesamtnutzung': this.heatmapLayer,
+			'Ankommende Fahrräder': this.heatmapInLayer,
+			'Ausgehende Fahrräder': this.heatmapOutLayer
 		};
 	
 		
