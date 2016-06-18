@@ -27,6 +27,11 @@ public class CAB {
 		
 		printJsonOutput("bookingStarts", DataOfInterest.STARTS, ZONE_REGISTRY.getZones());
 		printJsonOutput("bookingEnds", DataOfInterest.ENDS, ZONE_REGISTRY.getZones());
+		
+		printJsonOutput("bookingSinks", DataOfInterest.SINKS, ZONE_REGISTRY.getZones());
+		printJsonOutput("bookingSources", DataOfInterest.SOURCES, ZONE_REGISTRY.getZones());
+
+	
 	}
 
 	private static void printJsonOutput(String fileName, DataOfInterest dataType, Collection<RentalZone> zones) {
@@ -47,6 +52,7 @@ public class CAB {
 		for(RentalZone zone : zones) {
 			int actualData = extractDataOfInterest(zone, what);
 			
+			if(actualData == -1) continue;
 			if(actualData > max) max = actualData;
 
 			dataJson.append("\t\t{\"lat\": ");
@@ -72,6 +78,16 @@ public class CAB {
 		
 		case ENDS:
 			return zone.getRentalEnds();
+			
+		case SINK:
+			int sinks = zone.getRentalStarts() - zone.getRentalEnds();
+			if(sinks < 0) return -1;
+			return sinks;
+			
+		case SOURCE:
+			int source = zone.getRentalEnds() - zone.getRentalStarts();
+			if(source < 0) return -1;
+			return source;
 			
 		default:
 			//

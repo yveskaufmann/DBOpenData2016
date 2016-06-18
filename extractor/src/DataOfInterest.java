@@ -1,6 +1,6 @@
 
 public enum DataOfInterest {
 
-	STARTS, ENDS, RATIO
+	STARTS, ENDS, SINKS, SOURCES
 	
 }
