@@ -100,7 +100,8 @@
 			['Sink', this.heatmapSinkLayer],
 			['Source', this.heatmapSourceLayer],
 			['Ankommende Fahrräder', this.heatmapInLayer],
-			['Ausgehende Fahrräder', this.heatmapOutLayer]
+			['Ausgehende Fahrräder', this.heatmapOutLayer],
+			['Pfade' ,this.interpolatedLayer]
 
 		].map(map => map[0] + " = " +  map[1]._heatmap.getValueAt(location)). join('  <br>  ');
 	}
@@ -116,7 +117,7 @@
 		this.heatmapInLayer = new HeatmapOverlay(this.heatmapInCfg);
 		this.heatmapOutLayer = new HeatmapOverlay(this.heatmapOutCfg);
 		this.interpolatedLayer = new HeatmapOverlay(this.heatmapInterCfg);
-		
+
 		this.map = L.map(this.$map.get(0), {
 			zoom: 20,
 			maxZoom: 26,
