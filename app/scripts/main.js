@@ -20,7 +20,24 @@
 			valueField: 'count',
 
 		};
-
+		this.heatmapInCfg = {
+			radius: 0.3,
+			maxOpacity: .1,
+			scaleRadius: true,
+			useLocalExtrema: true,
+			latField: 'lat',
+			lngField: 'lng',
+			valueField: 'count'
+		};
+		this.heatmapOutCfg = {
+			radius: 0.3,
+			maxOpacity: .1,
+			scaleRadius: true,
+			useLocalExtrema: true,
+			latField: 'lat',
+			lngField: 'lng',
+			valueField: 'count'
+		};
 		$(window).on('hashchange', (() => {
 			this.start();
 		}).bind(this));
@@ -59,6 +76,8 @@
 		});
 
 		this.heatmapLayer = new HeatmapOverlay(this.heatmapCfg);
+		this.heatmapInLayer = new HeatmapOverlay(this.heatmapInCfg);
+		this.heatmapOutLayer = new HeatmapOverlay(this.heatmapOutCfg);
 
 		this.map = L.map(this.$map.get(0), {
 			zoom: 10,
@@ -67,14 +86,16 @@
 			center: location,
 			layers: [
 				this.osmLayer,
-				this.heatmapLayer
+				this.heatmapLayer,
+				this.heatmapInLayer,
+				this.heatmapOutLayer
 			]
 		});
 
 		/* add a example locations */
 		L.marker(location)
 			.addTo(this.map)
-			.bindPopup('You stay here');
+			.bindPopup('kk');
 
 		/* add layer switch control */
 		var mainLayer = {
@@ -82,8 +103,12 @@
 		};
 
 		var heatLayer = {
-			'Bike Rentals': this.heatmapLayer
+			'Gesamtnutzung': this.heatmapLayer,
+			'Ankommende Fahrräder': this.heatmapInLayer,
+			'Ausgehende Fahrräder': this.heatmapOutLayer
 		};
+	
+		
 
 		let layerOptions = {collapsed: false};
 		L.control.layers(mainLayer, heatLayer, layerOptions).addTo(this.map);
