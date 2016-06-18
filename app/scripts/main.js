@@ -21,146 +21,162 @@
 			valueField: 'count'
 		};
 		this.heatmapInCfg = {
-			radius: 0.3,
-			maxOpacity: .1,
+			radius: 0.1,
+			maxOpacity: .6,
 			scaleRadius: true,
 			useLocalExtrema: true,
 			latField: 'lat',
 			lngField: 'lng',
-			valueField: 'count'
-		};
-		this.heatmapOutCfg = {
-			radius: 0.3,
-			maxOpacity: .1,
-			scaleRadius: true,
-			useLocalExtrema: true,
-			latField: 'lat',
-			lngField: 'lng',
-			valueField: 'count'
-		};
-		$(window).on('hashchange', (() => {
-			this.start();
-		}).bind(this));
+			valueField: 'count',
+			gradient: {
+   				// enter n keys between 0 and 1 here
+    			// for gradient color customization
+    			'.5': 'blue',
+    			'.8': 'red',
+    			'.95': 'white'
+			},
+};
+this.heatmapOutCfg = {
+	radius: 0.1,
+	maxOpacity: .6,
+	scaleRadius: true,
+	useLocalExtrema: true,
+	latField: 'lat',
+	lngField: 'lng',
+	valueField: 'count'
+};
+$(window).on('hashchange', (() => {
+	this.start();
+}).bind(this));
 
-		this.start();
+this.start();
+}
+
+CityBikeMap.prototype.start = function () {
+	[this.$enterLocationView, this.$map, this.$locationLink, this.$alert].forEach((elm) => {
+		elm.removeClass('hidden');
+		elm.hide();
+	});
+
+	this.locationURL = window.location.hash;
+	this.locationURL = this.locationURL.slice(1) || null;
+
+	if (!this.locationURL) {
+		this.initShowEnterLocationView();
+	} else {
+		this.initShowLocationView();
+	}
+};
+
+CityBikeMap.prototype.initShowEnterLocationView = function () {
+	this.$enterLocationView.show();
+	this.$locateMeButton
+	.unbind()
+	.click(this.retrieveCurrentLocation.bind(this))
+	.on('touchstart', this.retrieveCurrentLocation.bind(this));
+};
+
+CityBikeMap.prototype.initShowLocationView = function () {
+	var location = this.locationURL.split('|');
+	if (location.length !== 2 || !location.every(jQuery.isNumeric)) {
+		$('.alert').show();
+		return;
 	}
 
-	CityBikeMap.prototype.start = function () {
-		[this.$enterLocationView, this.$map, this.$locationLink, this.$alert].forEach((elm) => {
-			elm.removeClass('hidden');
-			elm.hide();
-		});
+	if (this.map) {
+		this.map.remove();
+	}
 
-		this.locationURL = window.location.hash;
-		this.locationURL = this.locationURL.slice(1) || null;
+	this.osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+	});
 
-		if (!this.locationURL) {
-			this.initShowEnterLocationView();
-		} else {
-			this.initShowLocationView();
-		}
+	this.heatmapLayer = new HeatmapOverlay(this.heatmapCfg);
+	this.heatmapInLayer = new HeatmapOverlay(this.heatmapInCfg);
+	this.heatmapOutLayer = new HeatmapOverlay(this.heatmapOutCfg);
+
+	this.map = L.map(this.$map.get(0), {
+		zoom: 10,
+		maxZoom: 19,
+		minZoom: 3,
+		center: location,
+		layers: [
+		this.osmLayer,
+		this.heatmapLayer,
+		this.heatmapInLayer,
+		this.heatmapOutLayer
+		]
+	});
+
+	/* add a example locations */
+	L.marker(location)
+	.addTo(this.map)
+	.bindPopup('kk');
+
+	/* add layer switch control */
+	var mainLayer = {
+		'Map': this.osmLayer
 	};
 
-	CityBikeMap.prototype.initShowEnterLocationView = function () {
-		this.$enterLocationView.show();
-		this.$locateMeButton
-			.unbind()
-			.click(this.retrieveCurrentLocation.bind(this))
-				.on('touchstart', this.retrieveCurrentLocation.bind(this));
+	var heatLayer = {
+		'Gesamtnutzung': this.heatmapLayer,
+		'Ankommende Fahrräder': this.heatmapInLayer,
+		'Ausgehende Fahrräder': this.heatmapOutLayer
 	};
-
-	CityBikeMap.prototype.initShowLocationView = function () {
-		var location = this.locationURL.split('|');
-		if (location.length !== 2 || !location.every(jQuery.isNumeric)) {
-			$('.alert').show();
-			return;
-		}
-
-		if (this.map) {
-			this.map.remove();
-		}
-
-		this.osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-		});
-
-		this.heatmapLayer = new HeatmapOverlay(this.heatmapCfg);
-		this.heatmapInLayer = new HeatmapOverlay(this.heatmapInCfg);
-		this.heatmapOutLayer = new HeatmapOverlay(this.heatmapOutCfg);
-
-		this.map = L.map(this.$map.get(0), {
-			zoom: 10,
-			maxZoom: 19,
-			minZoom: 3,
-			center: location,
-			layers: [
-				this.osmLayer,
-				this.heatmapLayer,
-				this.heatmapInLayer,
-				this.heatmapOutLayer
-			]
-		});
-
-		/* add a example locations */
-		L.marker(location)
-			.addTo(this.map)
-			.bindPopup('kk');
-
-		/* add layer switch control */
-		var mainLayer = {
-			'Map': this.osmLayer
-		};
-
-		var heatLayer = {
-			'Gesamtnutzung': this.heatmapLayer,
-			'Ankommende Fahrräder': this.heatmapInLayer,
-			'Ausgehende Fahrräder': this.heatmapOutLayer
-		};
 	
-		
 
-		let layerOptions = {collapsed: false};
-		L.control.layers(mainLayer, heatLayer, layerOptions).addTo(this.map);
 
-		var heatMapData = {
-			max: 8,
-			data: [{lat: location[0], lng: location[1], count: 5}]
-		};
-		this.heatmapLayer.setData(heatMapData);
+	let layerOptions = {collapsed: false};
+	L.control.layers(mainLayer, heatLayer, layerOptions).addTo(this.map);
 
-		this.$map.show();
-		this.map.invalidateSize();
-
+	var heatMapData = {
+		max: 12,
+		data: [{lat: 52.5844745, lng: 13.4184694, count: 5}, {lat: location[0], lng: location[1], count: 8}]
 	};
-
-	CityBikeMap.prototype.retrieveCurrentLocation = function () {
-		if (!navigator.geolocation) {
-			window.alert('Geolocation isn\'t supported by your browser.');
-		} else {
-			navigator.geolocation.getCurrentPosition(this.showLocationLink.bind(this));
-		}
+	var heatInData  = {
+		max: 8,
+		data: [{lat: 52.51447289999,lng: 13.5184694, count: 5}]
 	};
+	var heatOutData  = {
+		max: 8,
+		data: [{lat: 52.51447289999, lng: 13.4184694, count: 5}]
+	};
+	this.heatmapLayer.setData(heatMapData);
+	this.heatmapInLayer.setData(heatInData);
+	this.heatmapOutLayer.setData(heatOutData);
+	this.$map.show();
+	this.map.invalidateSize();
 
-	CityBikeMap.prototype.showLocationLink = function (location) {
+};
 
-		var baseURL = window.location.href;
-		var hashPos = baseURL.indexOf('#');
-		if ( hashPos > 0 ) {
-			baseURL = baseURL.slice(0, hashPos);
-		}
+CityBikeMap.prototype.retrieveCurrentLocation = function () {
+	if (!navigator.geolocation) {
+		window.alert('Geolocation isn\'t supported by your browser.');
+	} else {
+		navigator.geolocation.getCurrentPosition(this.showLocationLink.bind(this));
+	}
+};
 
-		var url = baseURL + '#' + location.coords.latitude + '|' + location.coords.longitude;
-		this.$locationLink.empty().append(
-			$('<a></a>')
-				.attr('href', url)
-				.text(url)
-				.click(() => {
-					window.location.href = url;
-				})
+CityBikeMap.prototype.showLocationLink = function (location) {
+
+	var baseURL = window.location.href;
+	var hashPos = baseURL.indexOf('#');
+	if ( hashPos > 0 ) {
+		baseURL = baseURL.slice(0, hashPos);
+	}
+
+	var url = baseURL + '#' + location.coords.latitude + '|' + location.coords.longitude;
+	this.$locationLink.empty().append(
+		$('<a></a>')
+		.attr('href', url)
+		.text(url)
+		.click(() => {
+			window.location.href = url;
+		})
 		).show();
-	};
+};
 
-	this.cityBikeMap = new CityBikeMap();
-	this.cityBikeMap.start();
+this.cityBikeMap = new CityBikeMap();
+this.cityBikeMap.start();
 
 }).call(window, jQuery, L);
