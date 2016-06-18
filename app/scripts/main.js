@@ -86,7 +86,16 @@
 			.bindPopup('You stay here');
 
 		/* add layer switch control */
-		// L.control.layers().addTo(this.map);
+		var mainLayer = {
+			'Map': this.osmLayer
+		};
+
+		var heatLayer = {
+			'Bike Rentals': this.heatmapLayer
+		};
+
+		let layerOptions = {collapsed: false};
+		L.control.layers(mainLayer, heatLayer, layerOptions).addTo(this.map);
 
 		var heatMapData = {
 			max: 8,
