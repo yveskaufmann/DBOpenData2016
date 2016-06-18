@@ -9,7 +9,7 @@
 		this.$map = $('#map');
 		this.heatmapSinkCfg = {
 			radius: _r,
-			maxOpacity: .6,
+			maxOpacity: .8,
 			scaleRadius: true,
 			useLocalExtrema: true,
 			latField: 'lat',
@@ -19,14 +19,14 @@
 			gradient: {
    				// enter n keys between 0 and 1 here
     			// for gradient color customization
-    			'.0': 'white',
-    			'0.98': 'orange'
+    			'.0': 'red',
+    			'0.98': 'red'
 			}
 
 		};
 		this.heatmapSourceCfg = {
 			radius: _r,
-			maxOpacity: .6,
+			maxOpacity: .8,
 			scaleRadius: true,
 			useLocalExtrema: true,
 			latField: 'lat',
@@ -36,8 +36,8 @@
 			gradient: {
    				// enter n keys between 0 and 1 here
     			// for gradient color customization
-    			'.0': 'green',
-    			'0.98': 'orange'
+    			'.0': 'purple',
+    			'0.98': 'purple'
 			}
 
 		};
@@ -57,7 +57,22 @@
     			'.99': 'orange'
 			}
 		};
-
+		this.heatmapInterCfg =  {
+			radius: _r,
+			maxOpacity: .4,
+			scaleRadius: true,
+			useLocalExtrema: true,
+			latField: 'lat',
+			lngField: 'lng',
+			valueField: 'count',
+			gradient: {
+   				// enter n keys between 0 and 1 here
+    			// for gradient color customization
+    			//'.0': rgba(1,1,0,.95),
+    			'.82': 'blue',
+    			'.95': 'orange'
+			}
+		};
 		this.heatmapOutCfg = {
 			radius: _r,
 			maxOpacity: .6,
@@ -70,8 +85,8 @@
    				// enter n keys between 0 and 1 here
     			// for gradient color customization
     			//'.0': rgba(1,1,0,.95),
-    			'.95': 'blue',
-    			'.99': 'pink'
+    			'.82': 'blue',
+    			'.95': 'pink'
 			}
 		};
 	}
@@ -100,7 +115,8 @@
 		this.heatmapSourceLayer = new HeatmapOverlay(this.heatmapSourceCfg);
 		this.heatmapInLayer = new HeatmapOverlay(this.heatmapInCfg);
 		this.heatmapOutLayer = new HeatmapOverlay(this.heatmapOutCfg);
-
+		this.interpolatedLayer = new HeatmapOverlay(this.heatmapInterCfg);
+		
 		this.map = L.map(this.$map.get(0), {
 			zoom: 20,
 			maxZoom: 26,
@@ -111,7 +127,8 @@
 				this.heatmapSinkLayer,
 				this.heatmapSourceLayer,
 				this.heatmapInLayer,
-				this.heatmapOutLayer
+				this.heatmapOutLayer,
+				this.interpolatedLayer
 			]
 		});
 
@@ -124,7 +141,8 @@
 			'Sink': this.heatmapSinkLayer,
 			'Source': this.heatmapSourceLayer,
 			'Ankommende Fahrräder': this.heatmapInLayer,
-			'Ausgehende Fahrräder': this.heatmapOutLayer
+			'Ausgehende Fahrräder': this.heatmapOutLayer,
+			'Pfade': this.interpolatedLayer
 		};
 
 
@@ -144,6 +162,8 @@
 		this.heatmapInLayer.setData(bookingStarts);
 		this.heatmapOutLayer.setData(bookingEnds);
 		this.heatmapSourceLayer.setData(bookingSources);
+		this.heatmapSinkLayer.setData(bookingSinks);
+		this.interpolatedLayer.setData(interpolated);
 		this.locateControl.start();
 	};
 

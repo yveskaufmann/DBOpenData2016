@@ -12,7 +12,7 @@ public class CAB {
 	
 	private static final String RENTAL_ZONE_FILE = "HACKATHON_RENTAL_ZONE_CALL_A_BIKE.csv";
 
-	private static final String BOOKING_FILE = "1000HACKATHON_BOOKING_CALL_A_BIKE.csv";
+	private static final String BOOKING_FILE = "HACKATHON_BOOKING_CALL_A_BIKE.csv";
 
 	private static final RentalZoneRegistry ZONE_REGISTRY = RentalZoneRegistry.getInstance();
 
@@ -30,21 +30,24 @@ public class CAB {
 		
 		printJsonOutput("bookingSinks", DataOfInterest.SINKS, ZONE_REGISTRY.getZones());
 		printJsonOutput("bookingSources", DataOfInterest.SOURCES, ZONE_REGISTRY.getZones());
+		
+		
+		printJsonOutput("interpolated", DataOfInterest.INTERPOLATION, RouteRegistry.getInstance().interpolateVirtualZones());
 
-	
+		System.out.println("Finished.");
 	}
 
-	private static void printJsonOutput(String fileName, DataOfInterest dataType, Collection<RentalZone> zones) {
+	private static void printJsonOutput(String name, DataOfInterest dataType, Collection<RentalZone> zones) {
 		try {
-			PrintWriter writer = new PrintWriter(FILE_PATH + fileName + ".json");
-			writer.println(createJsonOutput(dataType, zones));
+			PrintWriter writer = new PrintWriter(FILE_PATH + name + ".js");
+			writer.println(createJsonOutput(name, dataType, zones));
 			writer.flush();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static String createJsonOutput(DataOfInterest what, Collection<RentalZone> zones) {
+	private static String createJsonOutput(String varName, DataOfInterest what, Collection<RentalZone> zones) {
 		StringBuilder dataJson = new StringBuilder();
 		
 		int pos = 0;
@@ -52,7 +55,7 @@ public class CAB {
 		for(RentalZone zone : zones) {
 			int actualData = extractDataOfInterest(zone, what);
 			
-			if(actualData == -1) continue;
+			if(actualData <= 0) continue;
 			if(actualData > max) max = actualData;
 
 			dataJson.append("\t\t{\"lat\": ");
@@ -68,32 +71,32 @@ public class CAB {
 			dataJson.append("\n");
 		}
 		
-		return "{\n\t\"max\": " + max + ",\n\t\"data\": [\n" + dataJson.toString() + "\n\t]\n};";		
+		return "var "+varName+" = {\n\t\"max\": " + max + ",\n\t\"data\": [\n" + dataJson.toString() + "\n\t]\n};";		
 	}
 
 	private static int extractDataOfInterest(RentalZone zone, DataOfInterest what) {
 		switch(what){
 		case STARTS:
+		case INTERPOLATION:
 			return zone.getRentalStarts();
 		
 		case ENDS:
 			return zone.getRentalEnds();
 			
 		case SINKS:
-			int sinks = zone.getRentalStarts() - zone.getRentalEnds();
+			int sinks = zone.getRentalEnds() - zone.getRentalStarts();
 			if(sinks < 0) return -1;
 			return sinks;
 			
 		case SOURCES:
-			int source = zone.getRentalEnds() - zone.getRentalStarts();
+			int source = zone.getRentalStarts() - zone.getRentalEnds();
 			if(source < 0) return -1;
 			return source;
 			
 		default:
-			//
+			return -1;
 		}
 		
-		return -1;
 	}
 
 	private static void processFile(String csvFile, IDataProcessor processor) {
