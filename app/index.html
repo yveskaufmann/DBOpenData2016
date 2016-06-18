@@ -28,43 +28,29 @@
 	  <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
 
-	<div class="container">
-	<div class="alert alert-danger alert-dismissible fade in hidden" role="alert">
-		<button type="button" class="close" data-dismiss="alert" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
-		<h4>Oh nein! Es ist ein Fehler aufgetreten!</h4>
-		<p>
-		  Mölicherweise haben Sie eine ungültige Location URL angegeben.
-		  Das korrekte Format lautet ...\#latiude|longtiude.
-		</p>
-	  </div>
+	<div  class="container">
+		<div id="mapControls">
+			<div class="alert alert-danger alert-dismissible fade in hidden" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+				<h4>Oh nein! Es ist ein Fehler aufgetreten!</h4>
+				<p>
+				  Mölicherweise haben Sie eine ungültige Location URL angegeben.
+				  Das korrekte Format lautet ...\#latiude|longtiude.
+				</p>
+			  </div>
 
-	  <div class="row enterLocation hidden row-centered">
-		  <header>
-		  <h1 class="text-center">Locus</h1>
-		  <hr class="primary">
-		</header>
-		<div class="col-centered">
-		  <a class="btn btn-primary btn-lg locateMeButton" href="#">Locate Me</a>
+			  <div class="row enterLocation row-centered">
+				 <header>
+				  	<h1 class="text-center">CityBikes</h1>
+				</header>
+				<div class="col-centered">
+				 	<a class="btn btn-primary btn-lg locateMeButton" href="#">Locate Me</a>
+				</div>
+			  </div>
 		</div>
-	  </div>
-	  <div class="row row-centered enterLocation">
-		<div class="col-centered">
-		  <div  class="text-center well locationLink">
-		  </div>
-		</div>
-	  </div>
 	</div>
-	<div id="map" class="showLocation"></div>
 
-	<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-	<script>
-	  (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-	  function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-	  e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-	  e.src='https://www.google-analytics.com/analytics.js';
-	  r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-	  ga('create','UA-XXXXX-X');ga('send','pageview');
-	</script>
+	<div id="map" class="showLocation"></div>
 
 	<!-- build:js scripts/vendor.js -->
 	<!-- bower:js -->

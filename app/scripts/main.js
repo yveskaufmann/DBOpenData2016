@@ -9,7 +9,6 @@
 		this.$map = $('#map');
 		this.$enterLocationView = $('.enterLocation');
 		this.$locateMeButton = $('.locateMeButton');
-		this.$locationLink = $('.locationLink');
 		this.$alert = $('.alert');
 		this.heatmapCfg = {
 			radius: 0.1,
@@ -18,38 +17,30 @@
 			useLocalExtrema: true,
 			latField: 'lat',
 			lngField: 'lng',
-			valueField: 'count'
+			valueField: 'count',
+
 		};
 
 		$(window).on('hashchange', (() => {
 			this.start();
 		}).bind(this));
 
-		this.start();
+		this.retrieveCurrentLocation();
 	}
 
 	CityBikeMap.prototype.start = function () {
-		[this.$enterLocationView, this.$map, this.$locationLink, this.$alert].forEach((elm) => {
-			elm.removeClass('hidden');
-			elm.hide();
-		});
-
 		this.locationURL = window.location.hash;
 		this.locationURL = this.locationURL.slice(1) || null;
 
-		if (!this.locationURL) {
-			this.initShowEnterLocationView();
-		} else {
-			this.initShowLocationView();
-		}
-	};
-
-	CityBikeMap.prototype.initShowEnterLocationView = function () {
 		this.$enterLocationView.show();
 		this.$locateMeButton
 			.unbind()
 			.click(this.retrieveCurrentLocation.bind(this))
 				.on('touchstart', this.retrieveCurrentLocation.bind(this));
+
+		if (this.locationURL != null) {
+			this.initShowLocationView();
+		}
 	};
 
 	CityBikeMap.prototype.initShowLocationView = function () {
@@ -109,14 +100,15 @@
 	};
 
 	CityBikeMap.prototype.retrieveCurrentLocation = function () {
+
 		if (!navigator.geolocation) {
 			window.alert('Geolocation isn\'t supported by your browser.');
 		} else {
-			navigator.geolocation.getCurrentPosition(this.showLocationLink.bind(this));
+			navigator.geolocation.getCurrentPosition(this.goToLocation.bind(this));
 		}
 	};
 
-	CityBikeMap.prototype.showLocationLink = function (location) {
+	CityBikeMap.prototype.goToLocation = function (location) {
 
 		var baseURL = window.location.href;
 		var hashPos = baseURL.indexOf('#');
@@ -125,14 +117,7 @@
 		}
 
 		var url = baseURL + '#' + location.coords.latitude + '|' + location.coords.longitude;
-		this.$locationLink.empty().append(
-			$('<a></a>')
-				.attr('href', url)
-				.text(url)
-				.click(() => {
-					window.location.href = url;
-				})
-		).show();
+		window.location.href = url;
 	};
 
 	this.cityBikeMap = new CityBikeMap();

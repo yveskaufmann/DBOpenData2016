@@ -47,6 +47,23 @@ html, body, #map {
 	border-bottom: 1px solid #e5e5e5;
 }
 
+/* GUI Layers controls and map */
+
+#mapControls {
+	z-index: 9999;
+	position:absolute;
+	display: block;
+  	margin-left: auto;
+ 	margin-right: auto;
+ 	padding: 0 20%;
+ 	vertical-align: top;
+}
+
+#map {
+	z-index: 42;
+	height: 100%;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
 	.container {
