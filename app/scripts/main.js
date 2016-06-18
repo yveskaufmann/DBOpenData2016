@@ -12,15 +12,14 @@
 		this.$locationLink = $('.locationLink');
 		this.$alert = $('.alert');
 		this.heatmapCfg = {
-			radius: 2,
-			maxOpacity: .8,
+			radius: 0.1,
+			maxOpacity: .6,
 			scaleRadius: true,
 			useLocalExtrema: true,
 			latField: 'lat',
 			lngField: 'lng',
 			valueField: 'count'
 		};
-		this.heatmapLayer = new HeatmapOverlay(this.heatmapCfg);
 
 		$(window).on('hashchange', (() => {
 			this.start();
@@ -68,10 +67,12 @@
 			attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
 		});
 
+		this.heatmapLayer = new HeatmapOverlay(this.heatmapCfg);
+
 		this.map = L.map(this.$map.get(0), {
 			zoom: 10,
 			maxZoom: 19,
-			minZoom: 8,
+			minZoom: 3,
 			center: location,
 			layers: [
 				this.osmLayer,
@@ -85,7 +86,13 @@
 			.bindPopup('You stay here');
 
 		/* add layer switch control */
-		L.control.layers().addTo(this.map);
+		// L.control.layers().addTo(this.map);
+
+		var heatMapData = {
+			max: 8,
+			data: [{lat: location[0], lng: location[1], count: 5}]
+		};
+		this.heatmapLayer.setData(heatMapData);
 
 		this.$map.show();
 		this.map.invalidateSize();
