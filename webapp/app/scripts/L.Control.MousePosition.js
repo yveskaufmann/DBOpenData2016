@@ -7,7 +7,7 @@ L.Control.MousePosition = L.Control.extend({
 		numDigits: 5,
 		lngFormatter: undefined,
 		latFormatter: undefined,
-		prefix: ""
+		prefix: ''
 	},
 
 	onAdd: function (map) {
@@ -28,8 +28,8 @@ L.Control.MousePosition = L.Control.extend({
 		var lat = this.options.latFormatter ? this.options.latFormatter(e.latlng.lat) : L.Util.formatNum(e.latlng.lat, this.options.numDigits);
 		var value = this.options.lngFirst ? lng + this.options.separator + lat : lat + this.options.separator + lng;
 		var prefixAndValue = 'Lng,Lat = ' + this.options.prefix + ' ' + value + '<br> ' + window.cityBikeMap.getData({
-			"x": e.layerPoint.x,
-			"y": e.layerPoint.y
+			'x': e.layerPoint.x,
+			'y': e.layerPoint.y
 		});
 		this._container.innerHTML = prefixAndValue;
 
@@ -38,14 +38,14 @@ L.Control.MousePosition = L.Control.extend({
 });
 
 L.Map.mergeOptions({
-		positionControl: false
+	positionControl: false
 });
 
 L.Map.addInitHook(function () {
-		if (this.options.positionControl) {
-				this.positionControl = new L.Control.MousePosition();
-				this.addControl(this.positionControl);
-		}
+	if (this.options.positionControl) {
+		this.positionControl = new L.Control.MousePosition();
+		this.addControl(this.positionControl);
+	}
 });
 
 L.control.mousePosition = function (options) {
