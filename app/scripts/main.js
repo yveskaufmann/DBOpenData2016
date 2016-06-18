@@ -21,17 +21,24 @@
 
 		};
 		this.heatmapInCfg = {
-			radius: 0.3,
-			maxOpacity: .1,
+			radius: 0.1,
+			maxOpacity: .6,
 			scaleRadius: true,
 			useLocalExtrema: true,
 			latField: 'lat',
 			lngField: 'lng',
-			valueField: 'count'
+			valueField: 'count',
+			gradient: {
+   				// enter n keys between 0 and 1 here
+    			// for gradient color customization
+    			'.5': 'blue',
+    			'.8': 'red',
+    			'.95': 'white'
+			}
 		};
 		this.heatmapOutCfg = {
-			radius: 0.3,
-			maxOpacity: .1,
+			radius: 0.1,
+			maxOpacity: .6,
 			scaleRadius: true,
 			useLocalExtrema: true,
 			latField: 'lat',
@@ -113,11 +120,21 @@
 		let layerOptions = {collapsed: false};
 		L.control.layers(mainLayer, heatLayer, layerOptions).addTo(this.map);
 
-		var heatMapData = {
+		var heatInData = {
 			max: 8,
-			data: [{lat: location[0], lng: location[1], count: 5}]
+			data: [{lat: 52.51447289999, lng:  13.5184694, count: 5}]
+		};
+		var heatOutData  = {
+		max: 8,
+		data: [{lat: 52.46447289999, lng: 13.4184694, count: 5}]
+		}
+		var heatMapData = {
+			max: 12,
+			data: [{lat: 52.5844745, lng: 13.4184694, count: 5}, {lat: location[0], lng: location[1], count: 8}]
 		};
 		this.heatmapLayer.setData(heatMapData);
+		this.heatmapInLayer.setData(heatInData);
+		this.heatmapOutLayer.setData(heatOutData);
 
 		this.$map.show();
 		this.map.invalidateSize();
