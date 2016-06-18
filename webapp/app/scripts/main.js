@@ -3,12 +3,12 @@
 	'use strict';
 
 	var window = this;
-
+	var _r = 0.003;
 	function CityBikeMap() {
 
 		this.$map = $('#map');
 		this.heatmapCfg = {
-			radius: 0.02,
+			radius: _r,
 			maxOpacity: .6,
 			scaleRadius: true,
 			useLocalExtrema: true,
@@ -26,7 +26,7 @@
 
 		};
 		this.heatmapInCfg = {
-			radius: 0.02,
+			radius: _r,
 			maxOpacity: .6,
 			scaleRadius: true,
 			useLocalExtrema: true,
@@ -43,7 +43,7 @@
 		};
 
 		this.heatmapOutCfg = {
-			radius: 0.02,
+			radius: _r,
 			maxOpacity: .6,
 			scaleRadius: true,
 			useLocalExtrema: true,
@@ -55,7 +55,7 @@
     			// for gradient color customization
     			//'.0': rgba(1,1,0,.95),
     			'.95': 'blue',
-    			'.99': 'orange'
+    			'.99': 'pink'
 			}
 		};
 	}
