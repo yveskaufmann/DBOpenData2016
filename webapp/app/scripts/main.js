@@ -19,8 +19,8 @@
 			gradient: {
    				// enter n keys between 0 and 1 here
     			// for gradient color customization
-    			'.0': 'white',
-    			'0.98': 'orange'
+    			'.0': 'red',
+    			'0.98': 'red'
 			}
 
 		};
@@ -36,8 +36,8 @@
 			gradient: {
    				// enter n keys between 0 and 1 here
     			// for gradient color customization
-    			'.0': 'green',
-    			'0.98': 'orange'
+    			'.0': 'blue',
+    			'0.98': 'blue'
 			}
 
 		};
@@ -133,6 +133,7 @@
 		this.heatmapInLayer.setData(bookingStarts);
 		this.heatmapOutLayer.setData(bookingEnds);
 		this.heatmapSourceLayer.setData(bookingSources);
+		this.heatmapSinkLayer.setData(bookingSinks);
 		this.locateControl.start();
 	};
 
