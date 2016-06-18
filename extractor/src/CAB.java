@@ -79,12 +79,12 @@ public class CAB {
 		case ENDS:
 			return zone.getRentalEnds();
 			
-		case SINK:
+		case SINKS:
 			int sinks = zone.getRentalStarts() - zone.getRentalEnds();
 			if(sinks < 0) return -1;
 			return sinks;
 			
-		case SOURCE:
+		case SOURCES:
 			int source = zone.getRentalEnds() - zone.getRentalStarts();
 			if(source < 0) return -1;
 			return source;
