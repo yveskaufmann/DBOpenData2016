@@ -36,7 +36,7 @@ public class CAB {
 
 	private static void printJsonOutput(String name, DataOfInterest dataType, Collection<RentalZone> zones) {
 		try {
-			PrintWriter writer = new PrintWriter(FILE_PATH + name + ".json");
+			PrintWriter writer = new PrintWriter(FILE_PATH + name + ".js");
 			writer.println(createJsonOutput(name, dataType, zones));
 			writer.flush();
 		} catch (FileNotFoundException e) {
