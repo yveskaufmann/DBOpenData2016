@@ -12,7 +12,7 @@ public class CAB {
 	
 	private static final String RENTAL_ZONE_FILE = "HACKATHON_RENTAL_ZONE_CALL_A_BIKE.csv";
 
-	private static final String BOOKING_FILE = "1000HACKATHON_BOOKING_CALL_A_BIKE.csv";
+	private static final String BOOKING_FILE = "HACKATHON_BOOKING_CALL_A_BIKE.csv";
 
 	private static final RentalZoneRegistry ZONE_REGISTRY = RentalZoneRegistry.getInstance();
 
@@ -34,17 +34,17 @@ public class CAB {
 	
 	}
 
-	private static void printJsonOutput(String fileName, DataOfInterest dataType, Collection<RentalZone> zones) {
+	private static void printJsonOutput(String name, DataOfInterest dataType, Collection<RentalZone> zones) {
 		try {
-			PrintWriter writer = new PrintWriter(FILE_PATH + fileName + ".json");
-			writer.println(createJsonOutput(dataType, zones));
+			PrintWriter writer = new PrintWriter(FILE_PATH + name + ".json");
+			writer.println(createJsonOutput(name, dataType, zones));
 			writer.flush();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static String createJsonOutput(DataOfInterest what, Collection<RentalZone> zones) {
+	private static String createJsonOutput(String varName, DataOfInterest what, Collection<RentalZone> zones) {
 		StringBuilder dataJson = new StringBuilder();
 		
 		int pos = 0;
@@ -52,7 +52,7 @@ public class CAB {
 		for(RentalZone zone : zones) {
 			int actualData = extractDataOfInterest(zone, what);
 			
-			if(actualData == -1) continue;
+			if(actualData <= 0) continue;
 			if(actualData > max) max = actualData;
 
 			dataJson.append("\t\t{\"lat\": ");
@@ -68,7 +68,7 @@ public class CAB {
 			dataJson.append("\n");
 		}
 		
-		return "{\n\t\"max\": " + max + ",\n\t\"data\": [\n" + dataJson.toString() + "\n\t]\n};";		
+		return "var "+varName+" = {\n\t\"max\": " + max + ",\n\t\"data\": [\n" + dataJson.toString() + "\n\t]\n};";		
 	}
 
 	private static int extractDataOfInterest(RentalZone zone, DataOfInterest what) {
