@@ -2,7 +2,13 @@ $icon-font-path: '../fonts/';
 
 // bower:scss
 @import "bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+@import "bower_components/font-awesome/scss/font-awesome.scss";
 // endbower
+
+@font-face {
+	font-family: "RockSalt";
+	src: url("../fonts/RockSalt.ttf");
+}
 
 .browsehappy {
 	margin: 0.2em 0;
@@ -57,6 +63,10 @@ html, body, #map {
  	margin-right: auto;
  	padding: 0 20%;
  	vertical-align: top;
+}
+
+#mapControls h1 {
+	font-family: "RockSalt";
 }
 
 #map {
