@@ -9,7 +9,6 @@
 		this.$map = $('#map');
 		this.$enterLocationView = $('.enterLocation');
 		this.$locateMeButton = $('.locateMeButton');
-		this.$locationLink = $('.locationLink');
 		this.$alert = $('.alert');
 		this.heatmapCfg = {
 			radius: 0.1,
@@ -18,7 +17,8 @@
 			useLocalExtrema: true,
 			latField: 'lat',
 			lngField: 'lng',
-			valueField: 'count'
+			valueField: 'count',
+
 		};
 		this.heatmapInCfg = {
 			radius: 0.1,
@@ -27,6 +27,7 @@
 			useLocalExtrema: true,
 			latField: 'lat',
 			lngField: 'lng',
+<<<<<<< HEAD
 			valueField: 'count',
 			gradient: {
    				// enter n keys between 0 and 1 here
@@ -122,6 +123,30 @@ CityBikeMap.prototype.initShowLocationView = function () {
 		'Gesamtnutzung': this.heatmapLayer,
 		'Ankommende Fahrräder': this.heatmapInLayer,
 		'Ausgehende Fahrräder': this.heatmapOutLayer
+=======
+			valueField: 'count'
+		};
+		$(window).on('hashchange', (() => {
+			this.start();
+		}).bind(this));
+
+		this.retrieveCurrentLocation();
+	}
+
+	CityBikeMap.prototype.start = function () {
+		this.locationURL = window.location.hash;
+		this.locationURL = this.locationURL.slice(1) || null;
+
+		this.$enterLocationView.show();
+		this.$locateMeButton
+			.unbind()
+			.click(this.retrieveCurrentLocation.bind(this))
+				.on('touchstart', this.retrieveCurrentLocation.bind(this));
+
+		if (this.locationURL != null) {
+			this.initShowLocationView();
+		}
+>>>>>>> 075ad3dfcd5b1e7156c22a6344200a2da43e522a
 	};
 	
 
@@ -133,9 +158,20 @@ CityBikeMap.prototype.initShowLocationView = function () {
 		max: 12,
 		data: [{lat: 52.5844745, lng: 13.4184694, count: 5}, {lat: location[0], lng: location[1], count: 8}]
 	};
+<<<<<<< HEAD
 	var heatInData  = {
 		max: 8,
 		data: [{lat: 52.51447289999,lng: 13.5184694, count: 5}]
+=======
+
+	CityBikeMap.prototype.retrieveCurrentLocation = function () {
+
+		if (!navigator.geolocation) {
+			window.alert('Geolocation isn\'t supported by your browser.');
+		} else {
+			navigator.geolocation.getCurrentPosition(this.goToLocation.bind(this));
+		}
+>>>>>>> 075ad3dfcd5b1e7156c22a6344200a2da43e522a
 	};
 	var heatOutData  = {
 		max: 8,
@@ -159,6 +195,7 @@ CityBikeMap.prototype.retrieveCurrentLocation = function () {
 
 CityBikeMap.prototype.showLocationLink = function (location) {
 
+<<<<<<< HEAD
 	var baseURL = window.location.href;
 	var hashPos = baseURL.indexOf('#');
 	if ( hashPos > 0 ) {
@@ -175,6 +212,19 @@ CityBikeMap.prototype.showLocationLink = function (location) {
 		})
 		).show();
 };
+=======
+	CityBikeMap.prototype.goToLocation = function (location) {
+
+		var baseURL = window.location.href;
+		var hashPos = baseURL.indexOf('#');
+		if ( hashPos > 0 ) {
+			baseURL = baseURL.slice(0, hashPos);
+		}
+
+		var url = baseURL + '#' + location.coords.latitude + '|' + location.coords.longitude;
+		window.location.href = url;
+	};
+>>>>>>> 075ad3dfcd5b1e7156c22a6344200a2da43e522a
 
 this.cityBikeMap = new CityBikeMap();
 this.cityBikeMap.start();
