@@ -80,6 +80,16 @@
 		this.initShowLocationView();
 	};
 
+	CityBikeMap.prototype.getData = function(location) {
+		return [
+			['Sink', this.heatmapSinkLayer],
+			['Source', this.heatmapSourceLayer],
+			['Ankommende Fahrräder', this.heatmapInLayer],
+			['Ausgehende Fahrräder', this.heatmapOutLayer]
+
+		].map(map => map[0] + " = " +  map[1]._heatmap.getValueAt(location)). join('  <br>  ');
+	}
+
 	CityBikeMap.prototype.initShowLocationView = function () {
 
 		this.osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -121,6 +131,7 @@
 
 		let layerOptions = {collapsed: false};
 		L.control.layers(mainLayer, heatLayer, layerOptions).addTo(this.map);
+		L.control.mousePosition().addTo(this.map);
 		this.locateControl = L.control.locate({
 			position: "topleft",
 			keepCurrentZoomLevel: false,
@@ -128,7 +139,7 @@
 				maxZoom: 13
 			}
 		}).addTo(this.map);
-		L.control.mousePosition().addTo(this.map);
+
 
 		this.heatmapInLayer.setData(bookingStarts);
 		this.heatmapOutLayer.setData(bookingEnds);

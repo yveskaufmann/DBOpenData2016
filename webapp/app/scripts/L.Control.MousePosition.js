@@ -23,11 +23,16 @@ L.Control.MousePosition = L.Control.extend({
 	},
 
 	_onMouseMove: function (e) {
+		console.log(e);
 		var lng = this.options.lngFormatter ? this.options.lngFormatter(e.latlng.lng) : L.Util.formatNum(e.latlng.lng, this.options.numDigits);
 		var lat = this.options.latFormatter ? this.options.latFormatter(e.latlng.lat) : L.Util.formatNum(e.latlng.lat, this.options.numDigits);
 		var value = this.options.lngFirst ? lng + this.options.separator + lat : lat + this.options.separator + lng;
-		var prefixAndValue = this.options.prefix + ' ' + value;
+		var prefixAndValue = 'Lng,Lat = ' + this.options.prefix + ' ' + value + '<br> ' + window.cityBikeMap.getData({
+			"x": e.layerPoint.x,
+			"y": e.layerPoint.y
+		});
 		this._container.innerHTML = prefixAndValue;
+
 	}
 
 });
