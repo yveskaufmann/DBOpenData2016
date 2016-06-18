@@ -11,17 +11,25 @@
 		this.$locateMeButton = $('.locateMeButton');
 		this.$alert = $('.alert');
 		this.heatmapCfg = {
-			radius: 0.1,
+			radius: 0.02,
 			maxOpacity: .6,
 			scaleRadius: true,
 			useLocalExtrema: true,
 			latField: 'lat',
 			lngField: 'lng',
 			valueField: 'count',
+			
+			gradient: {
+   				// enter n keys between 0 and 1 here
+    			// for gradient color customization
+    			'.0': 'red',
+    			'.5': 'white',
+    			'1': 'blue'
+			}
 
 		};
 		this.heatmapInCfg = {
-			radius: 0.1,
+			radius: 0.02,
 			maxOpacity: .6,
 			scaleRadius: true,
 			useLocalExtrema: true,
@@ -31,19 +39,27 @@
 			gradient: {
    				// enter n keys between 0 and 1 here
     			// for gradient color customization
-    			'.5': 'blue',
-    			'.8': 'red',
-    			'.95': 'white'
+    			//'.0': rgba(1,1,0,.95),
+    			'.95': 'red',
+    			'.99': 'orange'
 			}
 		};
+
 		this.heatmapOutCfg = {
-			radius: 0.1,
+			radius: 0.02,
 			maxOpacity: .6,
 			scaleRadius: true,
 			useLocalExtrema: true,
 			latField: 'lat',
 			lngField: 'lng',
-			valueField: 'count'
+			valueField: 'count',
+			gradient: {
+   				// enter n keys between 0 and 1 here
+    			// for gradient color customization
+    			//'.0': rgba(1,1,0,.95),
+    			'.95': 'blue',
+    			'.99': 'orange'
+			}
 		};
 		$(window).on('hashchange', (() => {
 			this.start();
@@ -110,7 +126,7 @@
 		};
 
 		var heatLayer = {
-			'Gesamtnutzung': this.heatmapLayer,
+			'Sink vs Source': this.heatmapLayer,
 			'Ankommende Fahrräder': this.heatmapInLayer,
 			'Ausgehende Fahrräder': this.heatmapOutLayer
 		};
