@@ -110,20 +110,8 @@
 			}
 		}).addTo(this.map);
 
-		var heatInData = {
-			max: 8,
-			data: [{lat: 52.51447289999, lng:  13.5184694, count: 5}]
-		};
-		var heatOutData  = {
-		max: 8,
-		data: [{lat: 52.46447289999, lng: 13.4184694, count: 5}]
-		}
-		var heatMapData = {
-			max: 12,
-			data: [{lat: 52.5844745, lng: 13.4184694, count: 5}, {lat: location[0], lng: location[1], count: 8}]
-		};
-		this.heatmapInLayer.setData(heatInData);
-		this.heatmapOutLayer.setData(heatOutData);
+		this.heatmapInLayer.setData(bookingStarts);
+		this.heatmapOutLayer.setData(bookingEnds);
 		this.locateControl.start();
 	};
 
