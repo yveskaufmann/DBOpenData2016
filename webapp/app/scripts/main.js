@@ -7,7 +7,7 @@
 	function CityBikeMap() {
 
 		this.$map = $('#map');
-		this.heatmapCfg = {
+		this.heatmapSinkCfg = {
 			radius: _r,
 			maxOpacity: .6,
 			scaleRadius: true,
@@ -20,8 +20,24 @@
    				// enter n keys between 0 and 1 here
     			// for gradient color customization
     			'.0': 'red',
-    			'.5': 'white',
-    			'1': 'blue'
+    			'0.98': 'red'
+			}
+
+		};
+		this.heatmapSourceCfg = {
+			radius: _r,
+			maxOpacity: .6,
+			scaleRadius: true,
+			useLocalExtrema: true,
+			latField: 'lat',
+			lngField: 'lng',
+			valueField: 'count',
+
+			gradient: {
+   				// enter n keys between 0 and 1 here
+    			// for gradient color customization
+    			'.0': 'blue',
+    			'0.98': 'blue'
 			}
 
 		};
@@ -70,18 +86,20 @@
 			attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
 		});
 
-		this.heatmapLayer = new HeatmapOverlay(this.heatmapCfg);
+		this.heatmapSinkLayer = new HeatmapOverlay(this.heatmapSinkCfg);
+		this.heatmapSourceLayer = new HeatmapOverlay(this.heatmapSourceCfg);
 		this.heatmapInLayer = new HeatmapOverlay(this.heatmapInCfg);
 		this.heatmapOutLayer = new HeatmapOverlay(this.heatmapOutCfg);
 
 		this.map = L.map(this.$map.get(0), {
-			zoom: 10,
-			maxZoom: 19,
+			zoom: 20,
+			maxZoom: 26,
 			minZoom: 3,
 			center: [52.505, 13.09],
 			layers: [
 				this.osmLayer,
-				this.heatmapLayer,
+				this.heatmapSinkLayer,
+				this.heatmapSourceLayer,
 				this.heatmapInLayer,
 				this.heatmapOutLayer
 			]
@@ -93,7 +111,8 @@
 		};
 
 		var heatLayer = {
-			'Sink vs Source': this.heatmapLayer,
+			'Sink': this.heatmapSinkLayer,
+			'Source': this.heatmapSourceLayer,
 			'Ankommende Fahrräder': this.heatmapInLayer,
 			'Ausgehende Fahrräder': this.heatmapOutLayer
 		};
@@ -106,12 +125,15 @@
 			position: "topleft",
 			keepCurrentZoomLevel: false,
 			locateOptions: {
-				maxZoom: 10
+				maxZoom: 13
 			}
 		}).addTo(this.map);
+		L.control.mousePosition().addTo(this.map);
 
 		this.heatmapInLayer.setData(bookingStarts);
 		this.heatmapOutLayer.setData(bookingEnds);
+		this.heatmapSourceLayer.setData(bookingSources);
+		this.heatmapSinkLayer.setData(bookingSinks);
 		this.locateControl.start();
 	};
 
