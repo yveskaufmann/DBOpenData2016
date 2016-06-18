@@ -1,29 +1,39 @@
+
 (function ($, L) {
-	'use strit';
+	'use strict';
 
 	var window = this;
 
-	function LocateMe() {
+	function CityBikeMap() {
 
 		this.$map = $('#map');
 		this.$enterLocationView = $('.enterLocation');
 		this.$locateMeButton = $('.locateMeButton');
 		this.$locationLink = $('.locationLink');
 		this.$alert = $('.alert');
+		this.heatmapCfg = {
+			radius: 2,
+			maxOpacity: .8,
+			scaleRadius: true,
+			useLocalExtrema: true,
+			latField: 'lat',
+			lngField: 'lng',
+			valueField: 'count'
+		};
+		this.heatmapLayer = new HeatmapOverlay(this.heatmapCfg);
 
-		$(window).on('hashchange', function () {
+		$(window).on('hashchange', (() => {
 			this.start();
-		}.bind(this));
+		}).bind(this));
 
 		this.start();
 	}
 
-	LocateMe.prototype.start = function () {
-		[this.$enterLocationView, this.$map, this.$locationLink, this.$alert].forEach(function(elm) {
+	CityBikeMap.prototype.start = function () {
+		[this.$enterLocationView, this.$map, this.$locationLink, this.$alert].forEach((elm) => {
 			elm.removeClass('hidden');
 			elm.hide();
 		});
-
 
 		this.locationURL = window.location.hash;
 		this.locationURL = this.locationURL.slice(1) || null;
@@ -35,7 +45,7 @@
 		}
 	};
 
-	LocateMe.prototype.initShowEnterLocationView = function () {
+	CityBikeMap.prototype.initShowEnterLocationView = function () {
 		this.$enterLocationView.show();
 		this.$locateMeButton
 			.unbind()
@@ -43,7 +53,7 @@
 				.on('touchstart', this.retrieveCurrentLocation.bind(this));
 	};
 
-	LocateMe.prototype.initShowLocationView = function () {
+	CityBikeMap.prototype.initShowLocationView = function () {
 		var location = this.locationURL.split('|');
 		if (location.length !== 2 || !location.every(jQuery.isNumeric)) {
 			$('.alert').show();
@@ -54,37 +64,43 @@
 			this.map.remove();
 		}
 
-		L.Icon.Default.imagePath = 'styles/images';
+		this.osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+		});
+
 		this.map = L.map(this.$map.get(0), {
-			zoom: '10',
+			zoom: 10,
 			maxZoom: 19,
 			minZoom: 8,
 			center: location,
 			layers: [
-				L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-					attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-				})
+				this.osmLayer,
+				this.heatmapLayer
 			]
 		});
 
+		/* add a example locations */
 		L.marker(location)
 			.addTo(this.map)
 			.bindPopup('You stay here');
+
+		/* add layer switch control */
+		L.control.layers().addTo(this.map);
 
 		this.$map.show();
 		this.map.invalidateSize();
 
 	};
 
-	LocateMe.prototype.retrieveCurrentLocation = function () {
+	CityBikeMap.prototype.retrieveCurrentLocation = function () {
 		if (!navigator.geolocation) {
-			alert('Geolocation isn\'t supported by your browser.');
+			window.alert('Geolocation isn\'t supported by your browser.');
 		} else {
 			navigator.geolocation.getCurrentPosition(this.showLocationLink.bind(this));
 		}
 	};
 
-	LocateMe.prototype.showLocationLink = function (location) {
+	CityBikeMap.prototype.showLocationLink = function (location) {
 
 		var baseURL = window.location.href;
 		var hashPos = baseURL.indexOf('#');
@@ -97,13 +113,13 @@
 			$('<a></a>')
 				.attr('href', url)
 				.text(url)
-				.click(function () {
+				.click(() => {
 					window.location.href = url;
 				})
 		).show();
 	};
 
-	this.locateMe = new LocateMe();
-	this.locateMe.start();
+	this.cityBikeMap = new CityBikeMap();
+	this.cityBikeMap.start();
 
 }).call(window, jQuery, L);
