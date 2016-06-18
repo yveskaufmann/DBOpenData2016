@@ -30,8 +30,11 @@ public class CAB {
 		
 		printJsonOutput("bookingSinks", DataOfInterest.SINKS, ZONE_REGISTRY.getZones());
 		printJsonOutput("bookingSources", DataOfInterest.SOURCES, ZONE_REGISTRY.getZones());
+		
+		
+		printJsonOutput("interpolated", DataOfInterest.INTERPOLATION, RouteRegistry.getInstance().interpolateVirtualZones());
 
-	
+		System.out.println("Finished.");
 	}
 
 	private static void printJsonOutput(String name, DataOfInterest dataType, Collection<RentalZone> zones) {
@@ -74,26 +77,26 @@ public class CAB {
 	private static int extractDataOfInterest(RentalZone zone, DataOfInterest what) {
 		switch(what){
 		case STARTS:
+		case INTERPOLATION:
 			return zone.getRentalStarts();
 		
 		case ENDS:
 			return zone.getRentalEnds();
 			
 		case SINKS:
-			int sinks = zone.getRentalStarts() - zone.getRentalEnds();
+			int sinks = zone.getRentalEnds() - zone.getRentalStarts();
 			if(sinks < 0) return -1;
 			return sinks;
 			
 		case SOURCES:
-			int source = zone.getRentalEnds() - zone.getRentalStarts();
+			int source = zone.getRentalStarts() - zone.getRentalEnds();
 			if(source < 0) return -1;
 			return source;
 			
 		default:
-			//
+			return -1;
 		}
 		
-		return -1;
 	}
 
 	private static void processFile(String csvFile, IDataProcessor processor) {

@@ -13,9 +13,13 @@ public class BookingProcessor extends AbstractProcessor {
 
 	private static final String IS_SERVICE_BOOKING = "1";
 	
+	private static final int CITY = DATENSAETZE.indexOf(BookingDataset.CITY_RENTAL_ZONE);
+
 	private static final BookingProcessor INSTANCE = new BookingProcessor();
 	
 	private static final RentalZoneRegistry ZONE_REGISTRY = RentalZoneRegistry.getInstance();
+
+	private static final String CITY_TO_INTERPOLATE = "Kassel";
 
 	
 	protected BookingProcessor(){
@@ -47,6 +51,9 @@ public class BookingProcessor extends AbstractProcessor {
 		if(null != startZone && null != finishZone) {
 			startZone.registerRentalStart();
 			finishZone.registerRentalFinish();
+			if(CITY_TO_INTERPOLATE.equals(read(data, CITY))) {
+				RouteRegistry.getInstance().addRoute(startZone, finishZone);
+			}
 		}
 		
 	}
