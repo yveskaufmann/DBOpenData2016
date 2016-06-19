@@ -3,8 +3,8 @@
 ## Building
 
 The Beautiful of Bikes-Map comes with a [Gulp](http://gulpjs.com/) build script,
-it provides build tasks and a serve task which create a web server that allows to access 
-the Beautiful of Bikes-Map over [http://localhost:9000](http://localhost:9000). 
+it provides build tasks and a serve task which creates a web server that allows to access 
+the Beautiful of Bikes-Map at [http://localhost:9000](http://localhost:9000). 
 
 ### Requirements
 ```sh
