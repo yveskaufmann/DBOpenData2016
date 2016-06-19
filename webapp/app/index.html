@@ -2,7 +2,7 @@
 <html class="no-js" lang="">
   <head>
 	<meta charset="utf-8">
-	<meta name="description" content="">
+	<meta name="description" content="Usage data of call-a-bikes">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>DBOpenData2016</title>
 
@@ -22,11 +22,6 @@
 
 	<!-- build:js scripts/vendor/modernizr.js -->
 	<script src="/bower_components/modernizr/modernizr.js"></script>
-	<script src="data/bookingStarts.js"></script>
-	<script src="data/bookingEnds.js"></script>
-	<script src="data/bookingSinks.js"></script>
-	<script src="data/bookingSources.js"></script>
-	<script src="data/interpolated.js"></script>
 	<!-- endbuild -->
   </head>
   <body>
@@ -66,7 +61,6 @@
 	<!-- endbower -->
 	<!-- endbuild -->
 
-	<script src="scripts/L.Control.MousePosition.js"></script>
 
 	<!-- build:js scripts/plugins.js -->
 	<script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/affix.js"></script>
@@ -83,7 +77,16 @@
 	<script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/tab.js"></script>
 	<!-- endbuild -->
 
+	<!-- build:js scripts/data.js -->
+	<script src="scripts/data/bookingStarts.js"></script>
+	<script src="scripts/data/bookingEnds.js"></script>
+	<script src="scripts/data/bookingSinks.js"></script>
+	<script src="scripts/data/bookingSources.js"></script>
+	<script src="scripts/data/interpolated.js"></script>
+	<!-- endbuild -->
+
 	<!-- build:js scripts/main.js -->
+	<script src="scripts/L.Control.MousePosition.js"></script>
 	<script src="scripts/main.js"></script>
 	<!-- endbuild -->
   </body>
