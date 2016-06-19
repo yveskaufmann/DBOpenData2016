@@ -1,5 +1,9 @@
 # DBOpenData2016
 
+This is our result from [DBHackDay 2016](https://www.mindboxberlin.com/index.php/hackday.html),
+the project objective was it to visualize usage/rental data of [Call-a-Bikes](http://data.deutschebahn.com/dataset/data-call-a-bike).
+
+
 ## Building
 
 The Beautiful of Bikes-Map comes with a [Gulp](http://gulpjs.com/) build script,
