@@ -10,7 +10,7 @@ There is also a Demo page: [Beauty-of-Bikes-Demo](https://yveskaufmann.github.io
 
 The Beauty of Bikes-Map comes with a [Gulp](http://gulpjs.com/) build script,
 it provides build tasks and a serve task which creates a web server that allows to access 
-the Beautiful of Bikes-Map at [http://localhost:9000](http://localhost:9000). 
+the Map at [http://localhost:9000](http://localhost:9000). 
 
 ### Requirements
 ```sh
