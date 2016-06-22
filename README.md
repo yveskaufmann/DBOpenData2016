@@ -30,7 +30,7 @@ $ npm install
 # installs all dependencies of the web site 
 $ bower install
 
-# hosts the Beautiful of Bikes map on http://localhost:9000 
+# hosts the Beauty of Bikes map on http://localhost:9000 
 $ gulp serve
 ```
 ##Links
