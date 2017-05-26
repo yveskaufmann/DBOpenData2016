@@ -1,7 +1,7 @@
 # DBOpenData2016
 
 This is our result from [DBHackDay 2016](https://www.mindboxberlin.com/index.php/hackday.html),
-the project objective was it to visualize usage/rental data of [Call-a-Bikes](http://data.deutschebahn.com/dataset/data-call-a-bike). 
+the project objective was it to visualize usage/rental data from [Call-a-Bike](http://data.deutschebahn.com/dataset/data-call-a-bike). 
 
 There is also a Demo page: [Beauty-of-Bikes-Demo](https://yveskaufmann.github.io/DBOpenData2016/).
 
